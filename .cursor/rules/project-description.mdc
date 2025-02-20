@@ -1,0 +1,43 @@
+---
+description: Keep the description in mind whenever making changes to the code 
+globs: 
+---
+# **Briefing on Adam-AI**  
+
+Adam-AI is an **AI-powered executive assistant** designed to streamline business workflows, automate routine tasks, and integrate seamlessly with communication and productivity tools. The focus is on **efficiency, security, and privacy**, with a **local-first approach** to data processing.  
+
+---
+
+## **Core Objectives**  
+1. **Task Automation** – Draft and send emails, manage meetings, summarize Slack/Teams messages, and handle document approvals.  
+2. **Seamless Integration** – Connect with Outlook, Gmail, Slack, DocuSign, and other SaaS tools.  
+3. **Real-Time Assistance** – Utilize **WebSockets** for real-time task execution and notifications.  
+4. **Privacy & Security** – **Runs locally** or on a **self-hosted server** to avoid exposing sensitive business data.  
+5. **Adaptability** – Uses **fine-tuning and retrieval-augmented generation (RAG)** to personalize responses based on user data.  
+
+---
+
+## **Technical Stack**  
+- **Frontend**: React + Vite (for a fast, responsive UI)  
+- **Backend**: FastAPI (for API and WebSocket communication)  
+- **AI Engine and Data Processing**: Mistral-Small-24B (fine-tuned for business-specific queries)  
+- **Database**: PostgreSQL (for structured data) + ChromaDB (for AI memory)  
+- **Containerization**: Docker (for easy deployment across environments)  
+
+---
+
+## **How Adam-AI Works**  
+1. **User Inputs a Command** (e.g., "Schedule a call with John at 3 PM.")  
+2. **Retrieves Context** from integrated apps (Calendar, Slack, Email, etc.).  
+3. **Processes Request** using AI inference with Mistral-Small-24B.  
+4. **Executes Action** via API integrations (sends email, schedules a meeting).  
+5. **Provides Real-Time Updates** using WebSockets.  
+
+---
+
+## **Development Priorities**  
+- **Performance Optimization**: Ensure quick response times even on low-end hardware.  
+- **Scalability**: Allow multi-user and enterprise-wide deployment.  
+- **Security-First Approach**: Data stays on-premise, with strict access controls.  
+
+Adam-AI is built for executives who need an AI that **understands their workflows, automates their tasks, and operates securely within their company’s ecosystem**.
