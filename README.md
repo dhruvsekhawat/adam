@@ -1,109 +1,156 @@
-# **Adam-AI**  
-### **An AI-Powered Executive Assistant for Smarter Workflows**  
+# Adam AI - Executive Assistant
 
-Adam-AI is an intelligent, privacy-focused AI assistant designed to **automate executive tasks**, **manage communications**, and **seamlessly integrate** with business applications. Unlike traditional cloud-based AI solutions, Adam-AI runs **locally** or in a **self-hosted environment**, ensuring **data privacy and security** while optimizing task management.  
+An AI-driven executive assistant web application designed for busy business owners. This application automates routine tasks like sending emails, scheduling meetings, triggering DocuSign workflows, and handling Slack messages using natural language commands.
 
----
+## 🚀 Tech Stack
 
-## **🚀 Features**
-### **1. AI-Powered Task Automation**  
-- Draft and send **emails** based on context and history.  
-- Automate **calendar scheduling** and meeting coordination.  
-- Summarize **Slack & Microsoft Teams messages** and extract key takeaways.  
+### Frontend
+- Next.js 14 with App Router
+- TypeScript
+- Tailwind CSS
+- React Query
+- Radix UI Components
+- Theme support (dark/light mode)
 
-### **2. Seamless App Integration**  
-- Connect with **Outlook, Gmail, Slack, Asana, DocuSign, and other business tools**.  
-- Retrieve and analyze **financial reports, contracts, and documents**.  
-- Manage **real-time notifications** from multiple applications.
+### Backend
+- FastAPI (Python)
+- PostgreSQL
+- LangChain
+- SQLAlchemy
 
-### **3. Privacy-First AI Execution**  
-- Runs **locally** using **Mistral-7B** for AI inference, ensuring **data never leaves your system**.  
-- **No third-party API dependencies** for AI processing.  
-- Secure authentication using **OAuth 2.0**.
+### Infrastructure
+- Docker & Docker Compose
+- Environment-based configuration
+- Health monitoring
 
-### **4. Real-Time AI Assistance**  
-- WebSocket-based interactions for **instant task execution**.  
-- AI-driven **multi-agent processing** to handle multiple workflows.  
+## 🛠 Prerequisites
 
----
+- Docker and Docker Compose
+- Node.js 18+ (for local development)
+- Python 3.11+ (for local development)
+- Git
 
-## **🛠️ Tech Stack**
-| Component  | Technology Used |
-|------------|----------------|
-| **Frontend**  | React (Vite), Zustand (State Management), TailwindCSS |
-| **Backend**   | FastAPI, PostgreSQL, WebSockets |
-| **AI Engine** | Mistral-7B (LLM) |
-| **Database**  | PostgreSQL (structured data), ChromaDB (RAG for AI memory) |
-| **Deployment**| Docker, Docker Compose |
+## 🚀 Quick Start
 
----
-
-## **📂 Project Structure**
-```
-adam-ai/
-│── 📂 apps/                     # Main applications
-│   ├── 📂 web/                  # React frontend
-│   ├── 📂 api/                  # FastAPI backend
-│   ├── 📂 worker/               # Background processing (task queues)
-│
-│── 📂 services/                  # AI & automation services
-│   ├── 📂 auth/                 # OAuth, JWT authentication
-│   ├── 📂 chat/                 # WebSockets for real-time messaging
-│   ├── 📂 documents/            # DocuSign & document management
-│   ├── 📂 email/                # Email automation
-│   ├── 📂 notifications/        # Push notifications & alerts
-│   ├── 📂 ai/                   # Mistral LLM processing, RAG, and AI logic
-│
-│── 📂 database/                 # DB models & connections
-│── 📂 shared/                   # Common utilities (logging, config)
-│── 📂 infra/                    # Docker, CI/CD pipelines
-│── 📂 scripts/                  # Deployment automation scripts
-│── .env                         # Environment variables
-│── README.md                    # Documentation
-```
-
----
-
-## **🔧 Setup & Installation**
-### **1. Clone the Repository**
+1. Clone the repository:
 ```bash
 git clone https://github.com/yourusername/adam-ai.git
 cd adam-ai
 ```
 
-### **2. Setup the Backend**
+2. Set up environment files:
+
+Create backend environment file (backend/config/.env.development):
 ```bash
-cd backend
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+cp backend/config/.env.example backend/config/.env.development
 ```
 
-### **3. Setup the Frontend**
+Create frontend environment file:
 ```bash
-cd frontend
-npm install
-npm run dev
+cp frontend/.env.example frontend/.env.development
 ```
 
-### **4. Run with Docker**
+3. Start the application:
+
+Development mode:
 ```bash
 docker-compose up --build
 ```
 
----
+Production mode:
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build
+```
 
-## **🛡️ Security & Privacy**
-Adam-AI prioritizes **user data security**:
-- **Fully local execution** (no cloud data processing).  
-- **OAuth 2.0 authentication** for secure API access.  
-- **No hardcoded credentials**, all secrets stored in `.env` files.
+4. Access the application:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
+- Health Check: http://localhost:8000/health
 
----
+## 📁 Project Structure
 
-## **📖 Documentation**
-Full documentation is available in the `/docs` folder.
+```
+adam-ai/
+├── backend/
+│   ├── app/
+│   │   ├── main.py             # FastAPI entry point
+│   │   ├── routers/            # API endpoints
+│   │   ├── models/             # Database models
+│   │   ├── services/           # Business logic
+│   │   └── utils/             # Helper functions
+│   ├── config/
+│   │   ├── .env.example       # Example environment variables
+│   │   └── config.py          # Configuration management
+│   ├── requirements.txt       # Python dependencies
+│   └── Dockerfile            # Backend Docker configuration
+├── frontend/
+│   ├── src/
+│   │   ├── app/              # Next.js pages
+│   │   ├── components/       # React components
+│   │   └── lib/             # Utilities and hooks
+│   ├── .env.example         # Example environment variables
+│   └── Dockerfile          # Frontend Docker configuration
+└── docker-compose.yml      # Docker composition
+```
 
+## 🔧 Development
 
----
+### Running Tests
+```bash
+# Backend tests
+docker-compose exec backend pytest
+
+# Frontend tests
+docker-compose exec frontend npm test
+```
+
+### Code Style
+- Backend: Black formatter, isort for imports
+- Frontend: ESLint, Prettier
+
+### Environment Variables
+
+#### Backend (.env.development)
+- `ENV`: development/production
+- `DEBUG`: true/false
+- `POSTGRES_*`: Database configuration
+- `SECRET_KEY`: Application secret key
+
+#### Frontend (.env.development)
+- `NEXT_PUBLIC_API_URL`: Backend API URL
+- `NEXT_PUBLIC_WS_URL`: WebSocket URL
+- `NEXT_PUBLIC_ENV`: Environment name
+
+## 🔐 Security
+
+- Non-root Docker containers
+- Environment-based configurations
+- CORS protection
+- Rate limiting (TODO)
+- API authentication (TODO)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🐛 Known Issues
+
+- None currently
+
+## 🗺 Roadmap
+
+- [ ] User authentication
+- [ ] Email integration
+- [ ] Calendar management
+- [ ] Document processing
+- [ ] Slack integration
+- [ ] Mobile responsiveness improvements
