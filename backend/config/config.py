@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings
 from functools import lru_cache
 import os
 from dotenv import load_dotenv
+from typing import List
 
 # Determine the environment
 ENV = os.getenv("ENV", "development")
@@ -26,12 +27,36 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-for-development")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
+    
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID")
+    GOOGLE_CLIENT_SECRET: str = os.getenv("GOOGLE_CLIENT_SECRET")
+    GOOGLE_REDIRECT_URI: str = os.getenv("GOOGLE_REDIRECT_URI")
+    
+    # Google Cloud & Vertex AI
+    GOOGLE_CLOUD_PROJECT: str = os.getenv("GOOGLE_CLOUD_PROJECT")
+    GOOGLE_CLOUD_LOCATION: str = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
+    GOOGLE_APPLICATION_CREDENTIALS: str = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+    
+    # Email Processing
+    MAX_EMAILS_PER_BATCH: int = 100
+    CHUNK_SIZE: int = 500
+    CHUNK_OVERLAP: int = 50
+    
+    # Vector Search
+    VECTOR_SIMILARITY_METRIC: str = "cosine"
+    DEFAULT_SEARCH_K: int = 5
     
     # CORS
-    BACKEND_CORS_ORIGINS: list = [
+    BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://localhost:8000",
     ]
+    
+    # Vertex AI Models
+    VERTEX_EMBEDDING_MODEL: str = "textembedding-gecko@latest"
+    VERTEX_LLM_MODEL: str = "gemini-pro"
     
     class Config:
         case_sensitive = True

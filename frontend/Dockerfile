@@ -2,8 +2,8 @@
 FROM node:18-alpine AS deps
 WORKDIR /app
 
-# Install dependencies needed for node-gyp
-RUN apk add --no-cache python3 make g++ libc6-compat
+# Install dependencies needed for node-gyp and health checks
+RUN apk add --no-cache python3 make g++ libc6-compat curl
 
 # Install dependencies
 COPY package.json package-lock.json* ./
@@ -13,12 +13,19 @@ RUN npm ci
 FROM node:18-alpine AS development
 WORKDIR /app
 
+# Install curl for health checks
+RUN apk add --no-cache curl
+
 # Copy dependencies
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Expose port
 EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/api/health || exit 1
 
 # Start development server
 CMD ["npm", "run", "dev"]
@@ -41,6 +48,9 @@ RUN npm run build
 # Stage 4: Production runner
 FROM node:18-alpine AS runner
 WORKDIR /app
+
+# Install curl for health checks
+RUN apk add --no-cache curl
 
 # Set environment variables
 ENV NODE_ENV production
@@ -66,6 +76,10 @@ EXPOSE 3000
 # Set host and port
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/api/health || exit 1
 
 # Start the application
 CMD ["node", "server.js"] 

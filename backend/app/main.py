@@ -2,10 +2,28 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.sessions import SessionMiddleware
 from config.config import get_settings
 import uvicorn
+from app.routers import auth, assistant
+from app.models.user import Base
+from app.db.database import engine
+from google.cloud import aiplatform
+import os
 
 settings = get_settings()
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
+
+# Initialize Vertex AI
+try:
+    aiplatform.init(
+        project=settings.GOOGLE_CLOUD_PROJECT,
+        location=settings.GOOGLE_CLOUD_LOCATION
+    )
+except Exception as e:
+    print(f"Warning: Could not initialize Vertex AI: {e}")
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -25,6 +43,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Add session middleware
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.SECRET_KEY
+)
+
+# Include routers
+app.include_router(auth.router, prefix=settings.API_PREFIX)
+app.include_router(assistant.router, prefix=settings.API_PREFIX)
+
 @app.get("/")
 async def root():
     """Root endpoint that redirects to docs"""
@@ -43,7 +71,8 @@ async def health_check():
             "status": "healthy",
             "service": "adam-ai-backend",
             "version": settings.VERSION,
-            "environment": settings.ENV
+            "environment": settings.ENV,
+            "vertex_ai_status": "initialized" if aiplatform._has_been_initialized else "not_initialized"
         }
     )
 
@@ -53,7 +82,13 @@ async def api_status():
     return {
         "status": "operational",
         "version": settings.VERSION,
-        "environment": settings.ENV
+        "environment": settings.ENV,
+        "features": {
+            "auth": True,
+            "email_processing": True,
+            "rag": True,
+            "style_analysis": True
+        }
     }
 
 if __name__ == "__main__":

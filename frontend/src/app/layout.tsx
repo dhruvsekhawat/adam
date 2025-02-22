@@ -6,15 +6,15 @@ import { ThemeProvider } from "@/components/theme-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Adam AI - Your Executive Assistant",
-  description: "AI-driven executive assistant for business automation",
+  title: "MyBox - Secure File Storage",
+  description: "Organize your files and keep them safe, everywhere!",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
