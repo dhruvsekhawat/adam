@@ -2,40 +2,28 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('token');
+  const token = request.cookies.get('token')?.value;
   const { pathname } = request.nextUrl;
 
   // Public paths that don't require authentication
-  const publicPaths = ['/login', '/auth/callback', '/'];
-  const isPublicPath = publicPaths.includes(pathname);
+  const publicPaths = ['/login', '/auth/callback'];
+  const isPublicPath = publicPaths.some(path => pathname.startsWith(path));
 
-  // Special handling for callback path
-  if (pathname === '/auth/callback') {
-    return NextResponse.next();
-  }
-
-  // If the user is not authenticated and trying to access a protected route
+  // Redirect to login if accessing protected route without token
   if (!token && !isPublicPath) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    const loginUrl = new URL('/login', request.url);
+    return NextResponse.redirect(loginUrl);
   }
 
-  // If the user is authenticated and trying to access login page
-  if (token && pathname === '/login') {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+  // Redirect to dashboard if accessing login page with valid token
+  if (token && isPublicPath) {
+    const dashboardUrl = new URL('/dashboard', request.url);
+    return NextResponse.redirect(dashboardUrl);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$).*)'],
 }; 

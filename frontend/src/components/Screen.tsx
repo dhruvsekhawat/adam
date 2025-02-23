@@ -6,7 +6,7 @@ interface ScreenProps {
 
 const Screen: React.FC<ScreenProps> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background text-foreground">
       {children}
     </div>
   );
