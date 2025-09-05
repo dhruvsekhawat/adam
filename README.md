@@ -4,7 +4,7 @@ An AI-driven executive assistant web application designed for busy business owne
 
 <img width="1279" height="955" alt="image" src="https://github.com/user-attachments/assets/a3f72ade-9f1f-4092-95b0-abad4c55fa77" />
 
-Key Features
+**Key Features**
 - Google Authentication: Secure and easy login using Google accounts. The authentication flow is handled via a backend service, with the frontend managing tokens and user sessions.
 - Interactive Chat Interface: A real-time chat interface allows users to communicate with the AI assistant. Messages are sent to a backend API, and the conversation is displayed in a user-friendly format.
 - Dashboard: After logging in, users are directed to a dashboard that serves as the main hub for all features. It displays user information and provides access to various tools.
